@@ -35,11 +35,8 @@ def talk(command):
     engine.runAndWait()
 
 def run_command(command):
-  
-    # command=input_command()
-    # print(command)
     if 'play' in command:
-        song=command.replace('song','').strip()
+        song=command.replace('play','').strip()
         pywhatkit.playonyt(song)
     elif 'what is' in command:
         pywhatkit.search(command)
@@ -73,7 +70,6 @@ def run_command(command):
 def wake_up_jarvis():
     while True:
         try:
-
             with sr.Microphone() as source:
                 print("Say jarvis to wake me")
                 listener.adjust_for_ambient_noise(source,duration=2)
