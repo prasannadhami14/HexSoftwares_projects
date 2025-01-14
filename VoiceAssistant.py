@@ -16,15 +16,16 @@ def input_command():
             listener.adjust_for_ambient_noise(source,duration=3)  # Optional: handles background noise
             print("Listening...")
             voice = listener.listen(source,timeout=5, phrase_time_limit=10)  # Capture audio
-            print("Audio captured!")
-            command = listener.recognize_google(voice)  # Transcribe audio
-            command=command.lower()
+            command = listener.recognize_google(voice).lower()  # Transcribe audio
             if 'jarvis' in command:
                 command=command.replace('jarvis','').strip()
     except sr.UnknownValueError:
         print("Sorry, I didn't understand that.")
+        return ""
     except sr.RequestError:
         print("Speech recognition service is unavailable.")
+        return ""
+
     except Exception as e:
         print(f"An unexpected error occurred: {e}")#printing output
     return command
@@ -33,9 +34,10 @@ def talk(command):
     engine.say(command)
     engine.runAndWait()
 
-def run_command():
-    command=input_command()
-    print(command)
+def run_command(command):
+  
+    # command=input_command()
+    # print(command)
     if 'play' in command:
         song=command.replace('song','').strip()
         pywhatkit.playonyt(song)
@@ -57,9 +59,39 @@ def run_command():
             talk("Sorry, I couldn't fetch the information right now.")
             print(f"Error: {e}")
     elif 'joke' in command:
-        talk(pyjokes.get_joke())
+        joke=pyjokes.get_joke()
+        talk(joke)
+        print(joke)
+    elif 'bye' in command:
+        talk('see you bye')
+        return False
+        
     else:
         talk('I did not understand what you are saying... ')
+    return True
+
+def wake_up_jarvis():
+    while True:
+        try:
+
+            with sr.Microphone() as source:
+                print("Say jarvis to wake me")
+                listener.adjust_for_ambient_noise(source,duration=2)
+                voice=listener.listen(source,timeout=None, phrase_time_limit=5)
+                command=listener.recognize_google(voice).lower()
+                return command
+        except sr.UnknownValueError:
+            print("Say jarvis to wake me")
+        except sr.RequestError:
+            print("Speech recognition service is unavailable.")
+            break
+    
 
 while True:
-    run_command()
+    wake_up_jarvis()
+    keep_running=True
+    while keep_running:
+        user_command=input_command()
+        if user_command:
+            keep_running=run_command(user_command)
+    

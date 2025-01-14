@@ -1,0 +1,12 @@
+
+Use command on the bracket to activate Jarvis
+This voice assistant is able to
+    1.Tell you joke (joke...)
+    2.Play music (play ...)
+    3.Search anyone on wikipedia (who is ...)
+    4.Search on web (what is ....)
+    5.Say bye to exit
+    6.Just call jarvis after saying bye it will be active again
+
+
+Note: all packages used here are mentioned in requirements.txt file
